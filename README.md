@@ -22,7 +22,7 @@ Com uma bagagem que une Administração, Design de Interação e Turismo, sempre
 </div>
 
 ---
-📫 *Como me encontrar:* [Seu LinkedIn aqui] | [Seu Email aqui]
+📫 *Como me encontrar:* [(https://www.linkedin.com/in/orobertodecastro/)] | [betodecastro@live.com]
 <!--
 **obetodecastro/obetodecastro** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
