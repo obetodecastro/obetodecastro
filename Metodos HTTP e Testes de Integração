@@ -1,0 +1,508 @@
+Métodos HTTP e Testes de Integração — Restful Booker
+1. Introdução
+
+Nesta atividade, utilizei a API Restful Booker, que é uma API criada para praticar testes e integração de APIs.
+
+O objetivo foi entender melhor como uma API funciona na prática, principalmente utilizando os métodos PUT, PATCH e DELETE, além de observar alguns dos principais códigos de resposta HTTP.
+
+Os testes foram realizados utilizando o Postman.
+
+Durante os testes, utilizei uma reserva criada anteriormente, que recebeu o ID 433.
+
+2. Diferença entre PUT, PATCH e DELETE
+PUT
+
+O método PUT é utilizado para atualizar um recurso que já existe.
+
+Na prática, podemos enviar os dados da reserva novamente, incluindo os campos que queremos manter e alterar.
+
+No meu teste, utilizei:
+
+PUT https://restful-booker.herokuapp.com/booking/433
+
+
+Antes do PUT, a reserva tinha:
+
+totalprice: 150
+checkin: 2026-10-10
+checkout: 2026-10-15
+
+
+No PUT, enviei:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 200,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-20",
+        "checkout": "2026-10-25"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+A API retornou a reserva com os novos valores.
+
+Com esse teste, entendi que o PUT pode ser utilizado quando queremos atualizar os dados de um recurso de forma mais completa.
+
+PATCH
+
+O método PATCH também é utilizado para atualizar informações, mas permite fazer uma alteração parcial.
+
+No meu teste, a reserva já estava com o preço 200. Então, utilizei o PATCH para alterar somente o preço para 250.
+
+A requisição foi:
+
+PATCH https://restful-booker.herokuapp.com/booking/433
+
+
+O corpo enviado foi:
+
+{
+    "totalprice": 250
+}
+
+
+A API retornou:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 250,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-20",
+        "checkout": "2026-10-25"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+Nesse caso, somente o totalprice foi alterado.
+
+Por isso, uma diferença que consegui entender na prática é:
+
+PUT: utilizado para atualizar os dados de um recurso de forma mais completa.
+
+PATCH: utilizado para fazer uma alteração parcial no recurso.
+
+DELETE: utilizado para excluir um recurso.
+
+DELETE
+
+O método DELETE é utilizado para excluir um recurso.
+
+No meu teste, utilizei:
+
+DELETE https://restful-booker.herokuapp.com/booking/433
+
+
+O Postman apresentou:
+
+201 Created
+
+
+Depois disso, fiz um novo GET para verificar se a reserva ainda existia.
+
+A requisição foi:
+
+GET https://restful-booker.herokuapp.com/booking/433
+
+
+A resposta foi:
+
+Not Found
+
+
+Isso mostrou que a reserva 433 não estava mais disponível depois da exclusão.
+
+3. Resumo dos métodos
+Método	Finalidade	Exemplo utilizado
+PUT	Atualizar os dados de um recurso	Alterar preço e datas da reserva
+PATCH	Fazer uma alteração parcial	Alterar somente o preço
+DELETE	Excluir um recurso	Excluir a reserva 433
+
+De forma simples:
+
+PUT
+↓
+Atualiza os dados do recurso
+
+PATCH
+↓
+Atualiza somente uma parte do recurso
+
+DELETE
+↓
+Exclui o recurso
+
+4. Principais Status Codes
+
+Os status codes são códigos enviados pela API para indicar o resultado de uma requisição.
+
+Durante os meus testes, observei principalmente os códigos 200, 201 e 404.
+
+200 OK
+
+O código 200 OK indica que a requisição foi realizada com sucesso.
+
+Nos meus testes, ele apareceu nas consultas e nas operações que retornaram os dados da reserva.
+
+Exemplo:
+
+GET /booking/433
+→ 200 OK
+
+201 Created
+
+O código 201 Created normalmente está relacionado à criação de um recurso.
+
+No meu teste, o Postman apresentou 201 Created após a requisição DELETE.
+
+O resultado observado foi:
+
+DELETE /booking/433
+→ 201 Created
+
+
+Como esse foi o resultado apresentado pela API durante o meu teste, registrei o código exatamente como apareceu no Postman.
+
+404 Not Found
+
+O código 404 Not Found indica que o recurso solicitado não foi encontrado.
+
+No meu teste, isso aconteceu depois que a reserva 433 foi excluída.
+
+Primeiro:
+
+DELETE /booking/433
+
+
+Depois:
+
+GET /booking/433
+
+
+O resultado foi:
+
+404 Not Found
+
+
+Nesse caso, o resultado fazia sentido porque a reserva já havia sido excluída.
+
+Outros status codes importantes
+
+Além dos códigos observados nos testes, existem outros status codes comuns em APIs:
+
+Status	Significado
+200 OK	Requisição realizada com sucesso
+201 Created	Recurso criado com sucesso
+400 Bad Request	A requisição possui algum problema
+401 Unauthorized	É necessária autenticação
+403 Forbidden	Acesso não permitido
+404 Not Found	Recurso não encontrado
+500 Internal Server Error	Erro interno no servidor
+5. Exemplo de Payload JSON
+
+Durante os testes, utilizei JSON para enviar informações para a API.
+
+Um exemplo de payload utilizado para criar a reserva foi:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 150,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-10",
+        "checkout": "2026-10-15"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+Esse JSON possui algumas informações simples, como:
+
+firstname
+lastname
+totalprice
+depositpaid
+
+
+Também possui um objeto dentro do JSON principal:
+
+"bookingdates": {
+    "checkin": "2026-10-10",
+    "checkout": "2026-10-15"
+}
+
+
+O bookingdates possui as datas de entrada e saída da reserva.
+
+Isso ajudou a entender que um JSON pode possuir objetos dentro de outros objetos.
+
+6. Testes de Integração
+
+Os testes foram realizados utilizando o Postman.
+
+O objetivo foi verificar se as diferentes chamadas da API funcionavam corretamente em conjunto.
+
+Para isso, criei uma reserva e utilizei o ID retornado pela API nas requisições seguintes.
+
+6.1 Criação da reserva — POST
+
+Primeiro utilizei:
+
+POST https://restful-booker.herokuapp.com/booking
+
+
+O corpo enviado foi:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 150,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-10",
+        "checkout": "2026-10-15"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+A API retornou:
+
+{
+    "bookingid": 433,
+    "booking": {
+        "firstname": "Joao",
+        "lastname": "Silva",
+        "totalprice": 150,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2026-10-10",
+            "checkout": "2026-10-15"
+        },
+        "additionalneeds": "Breakfast"
+    }
+}
+
+
+O ID criado foi:
+
+433
+
+6.2 Consulta da reserva — GET
+
+Depois utilizei o ID retornado pelo POST:
+
+GET https://restful-booker.herokuapp.com/booking/433
+
+
+A API retornou:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 150,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-10",
+        "checkout": "2026-10-15"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+Com isso, consegui verificar que a reserva criada pelo POST podia ser consultada pelo GET.
+
+6.3 Atualização da reserva — PUT
+
+Depois utilizei:
+
+PUT https://restful-booker.herokuapp.com/booking/433
+
+
+Enviei os dados atualizados:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 200,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-20",
+        "checkout": "2026-10-25"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+Com isso, alterei:
+
+totalprice: 150 → 200
+
+checkin:
+2026-10-10 → 2026-10-20
+
+checkout:
+2026-10-15 → 2026-10-25
+
+
+Depois fiz novamente um GET para confirmar as alterações.
+
+A resposta foi:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 200,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-20",
+        "checkout": "2026-10-25"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+6.4 Alteração parcial — PATCH
+
+Depois utilizei:
+
+PATCH https://restful-booker.herokuapp.com/booking/433
+
+
+Enviei somente:
+
+{
+    "totalprice": 250
+}
+
+
+A API retornou:
+
+{
+    "firstname": "Joao",
+    "lastname": "Silva",
+    "totalprice": 250,
+    "depositpaid": true,
+    "bookingdates": {
+        "checkin": "2026-10-20",
+        "checkout": "2026-10-25"
+    },
+    "additionalneeds": "Breakfast"
+}
+
+
+Nesse teste, somente o preço foi alterado:
+
+200 → 250
+
+
+Depois fiz novamente um GET e confirmei que o preço estava 250.
+
+6.5 Exclusão da reserva — DELETE
+
+Por último, utilizei:
+
+DELETE https://restful-booker.herokuapp.com/booking/433
+
+
+O Postman apresentou:
+
+201 Created
+
+
+Depois tentei consultar novamente a reserva:
+
+GET https://restful-booker.herokuapp.com/booking/433
+
+
+A resposta foi:
+
+404 Not Found
+
+
+Isso mostrou que a reserva 433 não estava mais disponível.
+
+7. Fluxo completo do teste
+
+O fluxo realizado no Postman foi:
+
+POST /booking
+       ↓
+Criação da reserva
+       ↓
+bookingid = 433
+       ↓
+GET /booking/433
+       ↓
+Consulta da reserva
+       ↓
+PUT /booking/433
+       ↓
+Atualização do preço e das datas
+       ↓
+GET /booking/433
+       ↓
+Confirmação das alterações
+       ↓
+PATCH /booking/433
+       ↓
+Alteração somente do preço
+       ↓
+GET /booking/433
+       ↓
+Confirmação da alteração
+       ↓
+DELETE /booking/433
+       ↓
+Exclusão da reserva
+       ↓
+GET /booking/433
+       ↓
+404 Not Found
+
+
+Esse fluxo foi importante porque mostrou que uma chamada pode depender do resultado de outra. Por exemplo, o bookingid retornado pelo POST foi utilizado nas requisições seguintes.
+
+8. O que aprendi com a atividade
+
+Com essa atividade, consegui entender melhor como os métodos HTTP funcionam na prática.
+
+Antes, eu conhecia os nomes dos métodos, mas não tinha tanta noção de como eles eram utilizados em uma API.
+
+Com os testes realizados no Postman, consegui perceber que:
+
+O POST pode ser utilizado para criar um novo recurso.
+
+O GET pode ser utilizado para consultar informações.
+
+O PUT pode ser utilizado para atualizar os dados de um recurso.
+
+O PATCH permite fazer uma alteração parcial.
+
+O DELETE é utilizado para excluir um recurso.
+
+Os códigos de status ajudam a entender o resultado de cada requisição.
+
+O JSON é utilizado para enviar e receber informações da API.
+
+Uma requisição pode depender do resultado de outra.
+
+O principal aprendizado foi perceber que uma API pode ser testada através de um fluxo de várias requisições. Nesse caso, primeiro criei uma reserva, depois consultei, alterei os dados, fiz uma alteração parcial e, por fim, excluí a reserva.
+
+9. Conclusão
+
+A atividade ajudou a entender de forma prática como funciona a comunicação entre um cliente, como o Postman, e uma API.
+
+Utilizando a Restful Booker, foi possível criar, consultar, atualizar e excluir uma reserva.
+
+Também consegui entender melhor a diferença entre PUT e PATCH e observar na prática o funcionamento do DELETE.
+
+Os testes realizados serviram como uma introdução aos testes de integração, pois foi possível verificar se as diferentes operações da API funcionavam em conjunto.
+
+Além da parte teórica, o uso do Postman ajudou a entender melhor o que acontece quando uma requisição é enviada e como interpretar a resposta recebida pela API.
